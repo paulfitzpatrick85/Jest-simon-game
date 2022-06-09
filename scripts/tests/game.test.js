@@ -1,7 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-const {game} = require("../game");
+
+//lines 6 and 7 appeared themselves and seem to cause tests to not run at all
+// const { beforeAll, test } = require("@jest/globals"); 
+// const { describe } = require("yargs");
+const {game, newGame} = require("../game");   //every new function must be added here
 
  beforeAll(() => {
     let fs = require("fs");
@@ -27,4 +31,25 @@ describe("game object contains correct keys", () => {
     test("choices contain correct ids", () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"]);
     });
+});
+
+
+describe("newGame works correctly", () => {
+    beforeAll(() => {                         //setup game with fake value to check if newGame function resets it
+        game.score = 42;
+        game.playerMoves = ["button1", "button2"];
+        game.currentGame = ["button1", "button2"];
+        newGame();
+    });
+    test("Should set game score to zero", () => {
+        expect(game.score).toEqual(0);
+    });
+    test("Should set playermoves to zero", () => {
+        expect(game.playerMoves.length).toEqual(0);
+    });
+    test("Should set currentGame to zero", () => {
+        expect(game.currentGame.length).toEqual(0);
+    });
+
+
 });

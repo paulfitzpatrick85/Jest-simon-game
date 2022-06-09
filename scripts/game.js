@@ -5,5 +5,10 @@ let game = {
     choices: ["button1", "button2", "button3", "button4"],
 }
 
+function newGame() {
+    game.score = 0
+    game.playerMoves = []
+    game.currentGame = []
+}
 
-module.exports = {game};
+module.exports = {game, newGame}; //every new function must be added here to be exported to game.js
