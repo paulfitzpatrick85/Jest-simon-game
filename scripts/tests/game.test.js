@@ -5,7 +5,7 @@
 //lines 6 and 7 appeared themselves and seem to cause tests to not run at all
 // const { beforeAll, test } = require("@jest/globals"); 
 // const { describe } = require("yargs");
-const {game, newGame, showScore} = require("../game");   //every new function must be added here
+const {game, newGame, showScore, addTurn} = require("../game");   //every new function must be added here
 
  beforeAll(() => {
     let fs = require("fs");
@@ -42,14 +42,17 @@ describe("newGame works correctly", () => {
         document.getElementById("score").innerText = "42";
         newGame();
     });
-    test("Should set game score to zero", () => {
+   test("Should set game score to zero", () => {
         expect(game.score).toEqual(0);
+    });
+    test("should add one move to the computer's game array", () => {
+        expect(game.currentGame.length).toEqual(1);  //will contain 1 move thats being pushed onto it
     });
     test("Should set playermoves to zero", () => {
         expect(game.playerMoves.length).toEqual(0);
     });
     test("Should set currentGame to zero", () => {
-        expect(game.currentGame.length).toEqual(0);
+        expect(game.currentGame.length).toEqual(1);
     });
     test("should display 0 for the element with id of score", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
