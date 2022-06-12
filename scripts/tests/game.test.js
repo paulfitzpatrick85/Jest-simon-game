@@ -5,7 +5,7 @@
 //lines 6 and 7 appeared themselves and seem to cause tests to not run at all
 // const { beforeAll, test } = require("@jest/globals"); 
 // const { describe } = require("yargs");
-const {game, newGame, showScore, addTurn, lightsOn} = require("../game");   //every new function must be added here
+const {game, newGame, showScore, addTurn, lightsOn, showTurns} = require("../game");   //every new function must be added here
 
  beforeAll(() => {
     let fs = require("fs");
@@ -30,6 +30,9 @@ describe("game object contains correct keys", () => {
     });
     test("choices contain correct ids", () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"]);
+    });
+    test("turnNumber key exists", () => {
+        expect("turnNumber" in game).toBe(true);
     });
 });
 
@@ -80,5 +83,10 @@ describe("gameplay works correctly", () => {
         let button = document.getElementById(game.currentGame[0]);  //using currentgame array because there'll always be at least 1 in it
         lightsOn(game.currentGame[0]);
         expect(button.classList).toContain("light")
-    })                  
+    });
+    test("showTurns should update game.turnNumber", () => {
+        game.turnNumber = 42;     //set number to test
+        showTurns();              //reset turn number
+        expect(game.turnNumber).toBe(0);  //test that number is now 0
+    });                  
 });
