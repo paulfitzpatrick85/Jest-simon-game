@@ -5,7 +5,7 @@
 //lines 6 and 7 appeared themselves and seem to cause tests to not run at all
 // const { beforeAll, test } = require("@jest/globals"); 
 // const { describe } = require("yargs");
-const {game, newGame, showScore, addTurn} = require("../game");   //every new function must be added here
+const {game, newGame, showScore, addTurn, lightsOn} = require("../game");   //every new function must be added here
 
  beforeAll(() => {
     let fs = require("fs");
@@ -35,8 +35,8 @@ describe("game object contains correct keys", () => {
 
 
 describe("newGame works correctly", () => {
-    beforeAll(() => {                         //setup game with fake value to check if newGame function resets it
-        game.score = 42;
+    beforeAll(() => {                         //runs before all tests
+        game.score = 42;                      //setup game with fake value to check if newGame function resets it
         game.playerMoves = ["button1", "button2"];
         game.currentGame = ["button1", "button2"];
         document.getElementById("score").innerText = "42";
@@ -57,5 +57,28 @@ describe("newGame works correctly", () => {
     test("should display 0 for the element with id of score", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
     });
+});
 
+describe("gameplay works correctly", () => {
+    beforeEach(() => {
+        game.score = 0;           //reset state each time
+        game.currentGame = [];    //reset state each time
+        game.playerMoves = [];    //reset state each time
+        addTurn();               //run function to add new turn to array
+    });
+    afterEach(() => {              //reset state after each test
+        game.score = 0;           
+        game.currentGame = [];    
+        game.playerMoves = [];        
+    });
+    test("addTurn adds a new turn to the game", () => {
+      addTurn();
+      expect(game.currentGame.length).toBe(2);            //should be 2 from being called on lines 67 and 75
+  });
+  //check if correct class is added to button to 'light it up'
+    test("should add correct class to ight up the butttons", () => {
+        let button = document.getElementById(game.currentGame[0]);  //using currentgame array because there'll always be at least 1 in it
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain("light")
+    })                  
 });

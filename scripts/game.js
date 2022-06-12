@@ -25,4 +25,11 @@ function showScore() {
     document.getElementById("score").innerText = game.score;
 }
 
-module.exports = {game, newGame, showScore, addTurn}; //every new function must be added here to be exported to game.js
+function lightsOn(circ) {
+    document.getElementById(circ).classList.add("light");          //add 'light class'
+    setTimeout(() => {                                      //set time to remove light class
+        document.getElementById(circ).classList.remove("light");
+    }, 400);
+}
+
+module.exports = {game, newGame, showScore, addTurn, lightsOn}; //every new function must be added here to be exported to game.js
