@@ -5,7 +5,9 @@
 //lines 6 and 7 appeared themselves and seem to cause tests to not run at all
 // const { beforeAll, test } = require("@jest/globals"); 
 // const { describe } = require("yargs");
-const {game, newGame, showScore, addTurn, lightsOn, showTurns} = require("../game");   //every new function must be added here
+const {game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn} = require("../game");   //every new function must be added here
+
+jest.spyOn(window, "alert").mockImplementation(() => { })
 
  beforeAll(() => {
     let fs = require("fs");
@@ -60,6 +62,13 @@ describe("newGame works correctly", () => {
     test("should display 0 for the element with id of score", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
     });
+    test("expect data-listener to be true", () => {
+        //newGame();
+        const elements = document.getElementsByClassName("circle");
+        for (let element of elements) {
+            expect(element.getAttribute("data-listener")).toEqual("true");
+        }
+    });
 });
 
 describe("gameplay works correctly", () => {
@@ -88,5 +97,10 @@ describe("gameplay works correctly", () => {
         game.turnNumber = 42;     //set number to test
         showTurns();              //reset turn number
         expect(game.turnNumber).toBe(0);  //test that number is now 0
+    });
+    test("should increment the score if the turn is correct", () => {
+        game.playerMoves.push(game.currentGame[0]);  //push turn from gameplay before each, into playerMoves 
+        playerTurn();                  //calling to check that player turn matches computer turn
+        expect(game.score).toBe(1);    //expect score to increase if turns match
     });                  
 });

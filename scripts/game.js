@@ -11,6 +11,19 @@ function newGame() {
     game.score = 0
     game.playerMoves = []
     game.currentGame = []
+
+    for (let circle of document.getElementsByClassName("circle")) {  //
+        if (circle.getAttribute("data-listener") !== "true") {     //check attribute of each circle
+            circle.addEventListener("click", (e) => {          // if not true, add event listener, pass event object as (e)
+                let move = e.target.getAttribute("id");           //get click target's id(buttons 1 to 4) and store in 'move'
+                lightsOn(move);                                    //call lightsOn on whichever button is clicked
+                game.playerMoves.push(move);                          //add to playerMoves array
+                playerTurn();                                          //function not wrote yet
+            });
+            circle.setAttribute("data-listener", "true");                // set attribute to true
+        }
+    }
+
     showScore();
     addTurn();
 }
@@ -45,4 +58,18 @@ function showTurns() {
     }, 800);
 }
 
-module.exports = {game, newGame, showScore, addTurn, lightsOn, showTurns}; //every new function must be added here to be exported to game.js
+function playerTurn() {
+    let i = game.playerMoves.length - 1;                  //get index of last element of playerMoves array
+    if (game.currentGame[i] === game.playerMoves[i]) {    //then compare with same index of currentGame array
+        if (game.currentGame.length === game.playerMoves.length) {     // if these are same length, it means the player must have got all correct and is at end of sequence
+            game.score++;                //increment the score
+            showScore();
+            addTurn();                       //then add new turn
+        }
+    } else {
+        alert("Wrong move!");
+        newGame();
+    }
+}
+
+module.exports = {game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn}; //every new function must be added here to be exported to game.js
