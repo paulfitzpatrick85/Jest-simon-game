@@ -107,5 +107,28 @@ describe("gameplay works correctly", () => {
         game.playerMoves.push("wrong");     //string "wrong" is pushed into playerMoves
         playerTurn();            //when playerTurn is called, alert will be called
         expect(window.alert).toBeCalledWith("Wrong move!");
+    });
+    test("should toggle turnInProgress to true", () => {
+        showTurns();
+        expect(game.turnInProgress).toBe(true);  //expected to be true while computer showing its turns
     });            
+    //clicking during comps turn
+    test("clicking during computer sequence should fail", () => {
+        showTurns();      //start comp seqeunce
+        game.lastButton = "";   //reset last button key, should now be empty
+        document.getElementById("button2").click();   //should be no id there if clicks are disabled, should not set value of game.lastButton
+        expect(game.lastButton).toEqual("");  //check that still empty
+    });
+    test("turnNumber key exists", () => {
+        expect("turnNumber" in game).toBe(true);
+    })
+    test("lastButton key exists", () => {
+        expect("lastButtonr" in game).toBe(true);
+    })
+    test("turnInProgress key exists", () => {
+        expect("turnInProgress" in game).toBe(true);
+    })
+    test("turnInProgress key value is false", () => {  //checking for default value in turnInProgress key,line 7 of game.js
+        expect("turnInProgress" in game).toBe(true);
+    })
 });

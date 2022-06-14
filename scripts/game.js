@@ -3,6 +3,8 @@ let game = {
     currentGame: [],
     playerMoves: [],
     turnNumber: 0,
+    lastButton: "",
+    turnInProgress: false,
     choices: ["button1", "button2", "button3", "button4"],
     
 }
@@ -15,10 +17,13 @@ function newGame() {
     for (let circle of document.getElementsByClassName("circle")) {  //
         if (circle.getAttribute("data-listener") !== "true") {     //check attribute of each circle
             circle.addEventListener("click", (e) => {          // if not true, add event listener, pass event object as (e)
+                if (game.currentGame.length > 0 && !game.turnInProgress){               //disable clicks during computers turn, length . 0 shows game is in progress
                 let move = e.target.getAttribute("id");           //get click target's id(buttons 1 to 4) and store in 'move'
+                game.lastButton = move;                         //store last button clicked to disable clicks during computers turn
                 lightsOn(move);                                    //call lightsOn on whichever button is clicked
                 game.playerMoves.push(move);                          //add to playerMoves array
-                playerTurn();                                          //function not wrote yet
+                playerTurn();
+                }                                          
             });
             circle.setAttribute("data-listener", "true");                // set attribute to true
         }
@@ -47,12 +52,14 @@ function lightsOn(circ) {
 }
 
 function showTurns() {
+    game.turnInProgress = true;    //turns have started
     game.turnNumber = 0;                 //set turn number
     let turns = setInterval(() => {      //sets interval/pause between light shown and next step in sequence
         lightsOn(game.currentGame[game.turnNumber]);    //use turnNumber as index number for currentGame array
         game.turnNumber++;
         if (game.turnNumber >= game.currentGame.length) {  //if turnNumber is >= currentGame length, than sequenc is finished, so interval can be cleared
             clearInterval(turns);
+            game,e.turnInProgress = false;      //intervals cleared, so game is finished
         }
         
     }, 800);
