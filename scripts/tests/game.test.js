@@ -7,7 +7,7 @@
 // const { describe } = require("yargs");
 const {game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn} = require("../game");   //every new function must be added here
 
-jest.spyOn(window, "alert").mockImplementation(() => { })
+jest.spyOn(window, "alert").mockImplementation(() => { })    //checks if alert has been called. alert is amethod of the window object
 
  beforeAll(() => {
     let fs = require("fs");
@@ -102,5 +102,10 @@ describe("gameplay works correctly", () => {
         game.playerMoves.push(game.currentGame[0]);  //push turn from gameplay before each, into playerMoves 
         playerTurn();                  //calling to check that player turn matches computer turn
         expect(game.score).toBe(1);    //expect score to increase if turns match
-    });                  
+    });      
+    test("should call alert if move is wrong", () => {
+        game.playerMoves.push("wrong");     //string "wrong" is pushed into playerMoves
+        playerTurn();            //when playerTurn is called, alert will be called
+        expect(window.alert).toBeCalledWith("Wrong move!");
+    });            
 });
